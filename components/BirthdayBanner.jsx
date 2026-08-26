@@ -20,15 +20,24 @@ export default function BirthdayBanner() {
 
   if (!people.length) return null;
   const nama = people.map((m) => m.panggilan || m.nama.split(" ")[0]).join(" & ");
+  const duo = people.length > 1;
 
   return (
     <div className="relative z-30 overflow-hidden border-b-2 border-ink bg-pink text-white">
       <div className="mx-auto flex max-w-5xl items-center justify-center gap-3 px-4 py-2.5 text-sm font-bold">
         <span className="animate-bounce" aria-hidden>🎉</span>
-        <p>
-          Selamat ulang tahun, <strong>{nama}</strong>! Semoga ramuan hidupmu makin manis 🧪💜
+        <p className="text-center">
+          {duo ? (
+            <>
+              Hari ini dobel! 🎂 Selamat ulang tahun, <strong>{nama}</strong> — semoga ramuan
+              kalian makin manis 🧪💜
+            </>
+          ) : (
+            <>
+              Selamat ulang tahun, <strong>{nama}</strong>! Semoga ramuan hidupmu makin manis 🧪💜
+            </>
+          )}
         </p>
-        <span aria-hidden>🎂</span>
       </div>
       {/* confetti titik-titik */}
       <div className="pointer-events-none absolute inset-0 opacity-40">
