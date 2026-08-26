@@ -1,11 +1,13 @@
 import Link from "next/link";
-import Image from "next/image";
+import ShimmerImage from "@/components/ShimmerImage";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TodaySchedule from "@/components/TodaySchedule";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
-import { Star, ScribbleArrow, Bubbles, PotionBottle } from "@/components/Doodles";
+import { Star, ScribbleArrow, Bubbles } from "@/components/Doodles";
+import MagicPotion from "@/components/MagicPotion";
+import StickerDivider from "@/components/StickerDivider";
 import { kelas, members } from "@/data/members";
 import { pengumuman } from "@/data/content";
 import { galeri } from "@/data/galeri";
@@ -64,7 +66,7 @@ export default function Home() {
 
           <Reveal delay={150}>
             <div className="mt-6 flex justify-center">
-              <PotionBottle size={170} className="drop-shadow-[6px_6px_0_rgba(31,26,23,1)] sm:size-[210px]" />
+              <MagicPotion />
             </div>
           </Reveal>
 
@@ -113,6 +115,8 @@ export default function Home() {
           </Reveal>
         </section>
 
+        <StickerDivider label="Momen" color="bg-pink text-white" />
+
         {/* GALERI PREVIEW */}
         {fotoPreview.length > 0 && (
           <section className="border-y-2 border-ink bg-white/60 py-12">
@@ -126,13 +130,13 @@ export default function Home() {
                 {fotoPreview.map((g, i) => (
                   <Reveal key={g.src} delay={i * 80}>
                     <Link href="/galeri" className="bcard block overflow-hidden bg-white">
-                      <Image
+                      <ShimmerImage
                         src={g.src}
                         alt={g.judul}
                         width={g.w}
                         height={g.h}
                         sizes="(max-width: 768px) 50vw, 25vw"
-                        className="h-36 w-full object-cover sm:h-44"
+                        className="h-36 sm:h-44"
                       />
                       <p className="truncate px-3 py-2 text-xs font-bold">{g.judul}</p>
                     </Link>
@@ -147,6 +151,8 @@ export default function Home() {
         )}
 
         <Marquee reverse />
+
+        <StickerDivider label="Jelajahi" color="bg-blue" />
 
         {/* QUICK LINKS */}
         <section className="relative mx-auto max-w-5xl px-4 py-12">

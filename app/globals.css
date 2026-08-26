@@ -19,9 +19,10 @@ body {
   font-family: var(--font-sans);
   /* pola grid halus ala kertas buku */
   background-image:
-    linear-gradient(rgba(31, 26, 23, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(31, 26, 23, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(127, 120, 110, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(127, 120, 110, 0.07) 1px, transparent 1px);
   background-size: 28px 28px;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* ---- komponen neo-brutalist ringan ---- */
@@ -123,4 +124,95 @@ body {
 }
 @media (prefers-reduced-motion: reduce) {
   .page-enter { animation: none; }
+}
+
+/* ---- loading cauldron (splash) ---- */
+.cauldron-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-cream);
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+.cauldron-overlay.done {
+  opacity: 0;
+  visibility: hidden;
+}
+@keyframes bubble-up {
+  0% { transform: translateY(0) scale(0.6); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(-46px) scale(1.15); opacity: 0; }
+}
+.cauldron-bubble {
+  animation: bubble-up 1.6s ease-in infinite;
+}
+@keyframes stir {
+  0%, 100% { transform: rotate(-7deg); }
+  50% { transform: rotate(7deg); }
+}
+.cauldron-pot {
+  animation: stir 1.8s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* ---- kursor trail gelembung ---- */
+.bubble-pop {
+  position: fixed;
+  pointer-events: none;
+  z-index: 90;
+  border-radius: 9999px;
+  border: 2px solid var(--color-ink);
+  animation: trail-pop 0.65s ease-out forwards;
+}
+@keyframes trail-pop {
+  0% { transform: scale(0.4); opacity: 0.85; }
+  100% { transform: scale(1.6) translateY(-18px); opacity: 0; }
+}
+
+/* ---- skeleton shimmer gambar ---- */
+.img-shimmer {
+  position: relative;
+  overflow: hidden;
+  background: rgba(127, 120, 110, 0.15);
+}
+.img-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  animation: shimmer 1.4s infinite;
+}
+.img-shimmer.loaded::after {
+  display: none;
+}
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* ---- scroll progress tabung reaksi ---- */
+.potion-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  z-index: 60;
+  background: transparent;
+  pointer-events: none;
+}
+.potion-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-purple), var(--color-pink), var(--color-yellow));
+  border-bottom-right-radius: 9999px;
+  transition: width 0.08s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cauldron-bubble, .cauldron-pot, .img-shimmer::after { animation: none; }
+  .bubble-pop { display: none; }
 }

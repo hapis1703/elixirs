@@ -1,9 +1,10 @@
 // 43 siswa XI-1.3 Elixirs — urutan absen kelas.
 // ig: opsional, isi "username" kalau ada. jabatan: lihat struktur.js
+// lahir: opsional, "MM-DD" — kalau hari ini cocok, homepage nampilin badge ultah
 
 export const members = [
   { nama: "Abrar El Fahri" },
-  { nama: "Ahmad Hafizh Syathir", jabatan: "Seksi Kerohanian" },
+  { nama: "Ahmad Hafizh Syathir", jabatan: "Seksi Kerohanian", lahir: "03-17" },
   { nama: "Alya Arzara" },
   { nama: "Amabel Nuala Azkalea Asmorohadi", panggilan: "Amabel", jabatan: "Bendahara I" },
   { nama: "Anissatul Luthfiyah", jabatan: "Seksi Kerohanian" },

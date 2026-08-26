@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SectionHeading from "@/components/SectionHeading";
+import ShimmerImage from "@/components/ShimmerImage";
 import { CameraDoodle } from "@/components/Doodles";
 import { galeri } from "@/data/galeri";
 import { kelas } from "@/data/members";
@@ -22,14 +22,7 @@ export default function GaleriPage() {
           <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
             {galeri.map((g) => (
               <figure key={g.src} className="bcard mb-4 break-inside-avoid overflow-hidden bg-white">
-                <Image
-                  src={g.src}
-                  alt={g.judul}
-                  width={g.w}
-                  height={g.h}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="w-full h-auto object-cover"
-                />
+                <ShimmerImage src={g.src} alt={g.judul} width={g.w} height={g.h} />
                 <figcaption className="border-t-2 border-ink px-4 py-3">
                   <p className="font-display text-sm font-extrabold">{g.judul}</p>
                   <p className="text-xs opacity-60">{fmt(g.tanggal)}</p>
@@ -55,6 +48,8 @@ export default function GaleriPage() {
           </div>
         )}
       </main>
+
+
       <Footer />
     </>
   );

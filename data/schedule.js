@@ -66,7 +66,8 @@ export const schedule = [
     slots: [
       { mulai: "06.30", selesai: "06.50", mapel: "IMTAQ", tipe: "event" },
       { mulai: "06.50", selesai: "08.10", mapel: "Kimia", jam: "1–2" },
-      { mulai: "08.10", selesai: "09.30", mapel: "BK / B. Sunda", jam: "3–4" },
+      { mulai: "08.10", selesai: "08.50", mapel: "BK / B. Sunda", jam: "3" },
+      { mulai: "08.50", selesai: "09.30", mapel: "P. Seni", jam: "4" },
       { mulai: "09.30", selesai: "09.50", mapel: "Istirahat", tipe: "break" },
       { mulai: "10.00", selesai: "10.40", mapel: "P. Seni", jam: "5" },
       { mulai: "10.40", selesai: "11.20", mapel: "BK / B. Sunda", jam: "6" },

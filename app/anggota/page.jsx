@@ -52,6 +52,7 @@ function MemberCard({ m, index }) {
 
 export default function AnggotaPage() {
   const [q, setQ] = useState("");
+  const [jab, setJab] = useState("Semua");
   // Jam live — hydration-safe: render kosong dulu di server.
   const [clock, setClock] = useState(null);
 
@@ -62,8 +63,18 @@ export default function AnggotaPage() {
     return () => clearInterval(t);
   }, []);
 
-  const filtered = members.filter((m) =>
-    m.nama.toLowerCase().includes(q.trim().toLowerCase())
+  // Kelompok jabatan untuk filter (gabung Bendahara I/II dst jadi satu).
+  const jabatanGroups = [
+    "Semua",
+    ...[...new Set(members.map((m) => m.jabatan).filter(Boolean)).values()].map((j) =>
+      j.replace(/ (I|II)$/, "")
+    ),
+  ].filter((v, i, a) => a.indexOf(v) === i);
+
+  const filtered = members.filter(
+    (m) =>
+      m.nama.toLowerCase().includes(q.trim().toLowerCase()) &&
+      (jab === "Semua" || (m.jabatan && m.jabatan.replace(/ (I|II)$/, "") === jab))
   );
 
   return (
@@ -98,6 +109,23 @@ export default function AnggotaPage() {
           placeholder="Cari nama…"
           className="bcard mt-6 w-full max-w-sm bg-white px-4 py-2.5 text-sm font-semibold outline-none"
         />
+
+        <div className="mt-3 flex flex-wrap gap-2">
+          {jabatanGroups.map((g) => (
+            <button
+              key={g}
+              type="button"
+              onClick={() => setJab(g)}
+              className={`rounded-full border-2 px-3 py-1 text-xs font-bold transition-colors ${
+                jab === g
+                  ? "border-ink bg-purple text-white shadow-[2px_2px_0_var(--color-ink)]"
+                  : "border-ink bg-white"
+              }`}
+            >
+              {g}
+            </button>
+          ))}
+        </div>
 
         <ul className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
           {filtered.map((m, i) => (

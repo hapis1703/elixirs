@@ -29,37 +29,39 @@ export default function Navbar() {
           XI-1.3 <span className="text-purple">Elixirs</span>
         </Link>
 
-        {/* desktop */}
-        <ul className="hidden items-center gap-1 md:flex">
-          {links.map((l) => {
-            const active = pathname === l.href;
-            return (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className={`rounded-full border-2 px-3 py-1 text-sm font-semibold transition-colors ${
-                    active
-                      ? "border-ink bg-yellow shadow-[2px_2px_0_var(--color-ink)]"
-                      : "border-transparent hover:border-ink"
-                  }`}
-                >
-                  {l.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="flex items-center gap-2">
+          {/* desktop */}
+          <ul className="hidden items-center gap-1 md:flex">
+            {links.map((l) => {
+              const active = pathname === l.href;
+              return (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className={`rounded-full border-2 px-3 py-1 text-sm font-semibold transition-colors ${
+                      active
+                        ? "border-ink bg-yellow shadow-[2px_2px_0_var(--color-ink)]"
+                        : "border-transparent hover:border-ink"
+                    }`}
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
 
-        {/* hamburger */}
-        <button
-          type="button"
-          className="bbtn relative z-50 bg-pink px-3 py-1 font-bold text-white md:hidden"
-          onClick={() => setOpen(!open)}
-          aria-expanded={open}
-          aria-label="Buka menu navigasi"
-        >
-          {open ? "✕" : "☰"}
-        </button>
+          {/* hamburger */}
+          <button
+            type="button"
+            className="bbtn relative z-50 bg-pink px-3 py-1 font-bold text-white md:hidden"
+            onClick={() => setOpen(!open)}
+            aria-expanded={open}
+            aria-label="Buka menu navigasi"
+          >
+            {open ? "✕" : "☰"}
+          </button>
+        </div>
       </nav>
 
       {/* mobile */}

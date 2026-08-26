@@ -1,0 +1,17 @@
+{
+  "name": "XI-1.3 Elixirs — SMAN 11 Kota Bekasi",
+  "short_name": "Elixirs",
+  "description": "Website resmi kelas XI-1.3 Elixirs: jadwal, anggota, galeri, pengumuman.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fdf6ec",
+  "theme_color": "#9b5de5",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
