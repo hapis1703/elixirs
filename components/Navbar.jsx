@@ -12,6 +12,7 @@ const links = [
   { href: "/galeri", label: "Galeri" },
   { href: "/prestasi", label: "Prestasi" },
   { href: "/pengumuman", label: "Pengumuman" },
+  { href: "/shoutbox", label: "Menfess" },
 ];
 
 export default function Navbar() {
