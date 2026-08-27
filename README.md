@@ -21,6 +21,7 @@ Satu rumah digital buat 43 siswa: jadwal pelajaran yang update sendiri sesuai ja
 | `/galeri` | Masonry foto momen kelas dengan caption & tanggal |
 | `/prestasi` | Timeline prestasi kelas (siap diisi) |
 | `/pengumuman` | Daftar pengumuman; pinned tampil paling atas |
+| `/shoutbox` | Menfess: kirim pesan rahasia + lagu (Deezer API / custom) → Discord webhook |
 
 ### Fitur Unggulan
 
@@ -29,7 +30,8 @@ Satu rumah digital buat 43 siswa: jadwal pelajaran yang update sendiri sesuai ja
 - **Konten tanpa coding** — semua data siswa, jadwal, struktur, galeri, pengumuman, dan prestasi hidup di folder `data/`. Edit file → push → selesai.
 - **Desain neo-brutalist playful** — border hitam tebal, hard shadow, palet kuning/pink/biru/lime/ungu di atas dasar cream bermotif grid ala buku tulis.
 - **Animasi halus** — reveal on-scroll, transisi antar halaman, marquee dua arah (pause saat hover), botol potion melayang di hero — semua menghormati `prefers-reduced-motion`.
-- **OG image dinamis** — preview link yang rapi saat dibagikan ke WhatsApp/Discord/IG, digenerate via `next/og`.
+- **Menfess ke Discord** — form pesan rahasia dengan search lagu Deezer (atau ketik manual). Kirim langsung ke channel Discord via webhook embed. Tanpa database, tanpa admin panel.
+- **OG image dinamis** — preview link yang rapi saat dibagikan ke WhatsApp/Discord/IG, digenerated via `next/og`.
 
 ## Tech Stack
 
@@ -40,7 +42,7 @@ Satu rumah digital buat 43 siswa: jadwal pelajaran yang update sendiri sesuai ja
 | [Tabler Icons](https://tabler.io/icons) | Ikon (jika dibutuhkan) |
 | Font: Bricolage Grotesque + Plus Jakarta Sans | Display & body, via `next/font` |
 
-Tidak ada database, tidak ada backend — seluruh konten adalah file statis, sehingga situs bisa di-host gratis di mana saja.
+Konten sepenuhnya file statis. Satu-satunya server-side endpoint: API route Next.js untuk proxy Deezer dan kirim menfess ke Discord webhook. Tidak ada database.
 
 ## Struktur Proyek
 
@@ -65,12 +67,16 @@ Tidak ada database, tidak ada backend — seluruh konten adalah file statis, seh
 │   ├── SectionHeading.jsx  # Heading sticker playful
 │   ├── Reveal.jsx          # Animasi reveal on-scroll
 │   └── Doodles.jsx         # SVG doodle: potion, gelembung, bintang, dll
+├── app/api/
+│   ├── shoutbox/route.js   # POST menfess → Discord webhook embed
+│   └── deezer/route.js     # Proxy Deezer search (bypass CORS)
 ├── data/
 │   ├── members.js          # 43 siswa + info kelas + IG
 │   ├── schedule.js         # Jadwal pelajaran Senin–Jumat
 │   ├── struktur.js         # Organigram kelas
 │   ├── content.js          # Pengumuman & prestasi
 │   └── galeri.js           # Daftar foto galeri
+├── .env.local              # DISCORD_MENFESS_WEBHOOK URL
 └── public/gallery/         # File foto momen kelas
 ```
 
