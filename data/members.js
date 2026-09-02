@@ -3,7 +3,7 @@
 // lahir: opsional, "MM-DD" — kalau hari ini cocok, homepage nampilin badge ultah
 
 export const members = [
-  { nama: "Abrar El Fahri" },
+  { nama: "Abrar El Fahri", lahir: "09-02" },
   { nama: "Ahmad Hafizh Syathir", jabatan: "Seksi Kerohanian", lahir: "03-17" },
   { nama: "Alya Arzara" },
   { nama: "Amabel Nuala Azkalea Asmorohadi", panggilan: "Amabel", jabatan: "Bendahara I" },
