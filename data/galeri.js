@@ -25,5 +25,12 @@ export const galeri = [
     tanggal: "2026-08-13",
     w: 1280,
     h: 720,
+  },
+  {
+    src: "/gallery/IMG-20260902-WA0023.jpg",
+    judul: "Saga Boys",
+    tanggal: "2026-08-13",
+    w: 720,
+    h: 1080,
   }
 ];
