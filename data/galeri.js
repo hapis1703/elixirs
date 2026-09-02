@@ -25,12 +25,5 @@ export const galeri = [
     tanggal: "2026-08-13",
     w: 1280,
     h: 720,
-  },
-  {
-    src: "/gallery/heart-hands.webp",
-    judul: "Couple Of The Year 💜",
-    tanggal: "2026-08-13",
-    w: 720,
-    h: 1280,
-  },
+  }
 ];
