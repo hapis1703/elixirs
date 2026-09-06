@@ -98,3 +98,9 @@ export function today(date = new Date()) {
   const day = date.getDay();
   return schedule.find((s) => s.index === day) ?? null;
 }
+
+// Jadwal besok (wrap Minggu→Senin). Return null jika besok libur.
+export function tomorrow(date = new Date()) {
+  const next = (date.getDay() + 1) % 7;
+  return schedule.find((s) => s.index === next) ?? null;
+}

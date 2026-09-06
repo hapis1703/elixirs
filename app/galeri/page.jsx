@@ -3,13 +3,22 @@ import Footer from "@/components/Footer";
 import SectionHeading from "@/components/SectionHeading";
 import ShimmerImage from "@/components/ShimmerImage";
 import { CameraDoodle } from "@/components/Doodles";
-import { galeri } from "@/data/galeri";
+import { galeri as localGaleri } from "@/data/galeri";
 import { kelas } from "@/data/members";
+import { getGaleri } from "@/lib/sheets";
 
 const fmt = (iso) =>
   new Date(iso).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
 
-export default function GaleriPage() {
+export default async function GaleriPage() {
+  let galeri = localGaleri;
+  try {
+    const g = await getGaleri();
+    if (g.length) galeri = g;
+  } catch (e) {
+    console.error("Sheets fetch failed, using local fallback:", e.message);
+  }
+
   return (
     <>
       <Navbar />
@@ -54,3 +63,5 @@ export default function GaleriPage() {
     </>
   );
 }
+
+</parameter>

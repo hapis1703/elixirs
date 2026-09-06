@@ -3,14 +3,17 @@ import ShimmerImage from "@/components/ShimmerImage";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TodaySchedule from "@/components/TodaySchedule";
+import TomorrowSchedule from "@/components/TomorrowSchedule";
+import BirthdayCounter from "@/components/BirthdayCounter";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import { Star, ScribbleArrow, Bubbles } from "@/components/Doodles";
 import MagicPotion from "@/components/MagicPotion";
 import StickerDivider from "@/components/StickerDivider";
 import { kelas, members } from "@/data/members";
-import { pengumuman } from "@/data/content";
-import { galeri } from "@/data/galeri";
+import { pengumuman as localPengumuman } from "@/data/content";
+import { galeri as localGaleri } from "@/data/galeri";
+import { getPengumuman, getGaleri } from "@/lib/sheets";
 
 const marqueeItems = [
   "XI-1.3 ELIXIRS",
@@ -38,7 +41,17 @@ function Marquee({ reverse = false }) {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  let pengumuman = localPengumuman;
+  let galeri = localGaleri;
+  try {
+    const [p, g] = await Promise.all([getPengumuman(), getGaleri()]);
+    if (p.length) pengumuman = p;
+    if (g.length) galeri = g;
+  } catch (e) {
+    console.error("Sheets fetch failed, using local fallback:", e.message);
+  }
+
   const pinned = pengumuman.filter((p) => p.pinned).slice(0, 2);
   const latest = [...pengumuman]
     .sort((a, b) => b.tanggal.localeCompare(a.tanggal))
@@ -71,7 +84,7 @@ export default function Home() {
           </Reveal>
 
           <p className="mx-auto mt-5 max-w-md text-sm opacity-70 sm:text-base">
-            “{kelas.motto}” — {members.length} siswa, satu kelas, tak terhingga energinya.
+            "{kelas.motto}" — {members.length} siswa, satu kelas, tak terhingga energinya.
           </p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
             <Link href="/anggota" className="bbtn bg-yellow px-5 py-2.5 text-sm font-bold">
@@ -85,12 +98,23 @@ export default function Home() {
 
         <Marquee />
 
-        {/* JADWAL HARI INI + PENGUMUMAN */}
+        {/* BIRTHDAY COUNTER */}
+        <section className="mx-auto max-w-5xl px-4 py-6">
+          <BirthdayCounter />
+        </section>
+
+        {/* JADWAL HARI INI + BESOK + PENGUMUMAN */}
         <section className="mx-auto grid max-w-5xl gap-8 px-4 py-12 md:grid-cols-[3fr_2fr]">
-          <Reveal>
-            <SectionHeading color="pink">Hari Ini</SectionHeading>
-            <TodaySchedule />
-          </Reveal>
+          <div className="space-y-6">
+            <Reveal>
+              <SectionHeading color="pink">Hari Ini</SectionHeading>
+              <TodaySchedule />
+            </Reveal>
+            <Reveal delay={80}>
+              <SectionHeading color="blue">Besok</SectionHeading>
+              <TomorrowSchedule />
+            </Reveal>
+          </div>
           <Reveal delay={120}>
             <SectionHeading color="lime">Pengumuman</SectionHeading>
             <ul className="space-y-3">
@@ -184,3 +208,5 @@ export default function Home() {
     </>
   );
 }
+
+</parameter>

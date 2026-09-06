@@ -39,14 +39,14 @@ export default function TodaySchedule() {
           </span>
         )}
       </div>
-      <ul className="flex flex-wrap gap-2">
+      <ul className="space-y-2">
         {d.slots.map((s, i) => {
           const isBreak = s.tipe === "break";
           const isActive = current === s;
           return (
             <li
               key={i}
-              className={`rounded-full border-2 border-ink px-3 py-1 text-xs font-semibold ${
+              className={`flex items-center justify-between rounded-lg border-2 border-ink px-3 py-2 text-xs font-semibold ${
                 isActive
                   ? "bg-yellow shadow-[2px_2px_0_var(--color-ink)]"
                   : isBreak
@@ -54,7 +54,8 @@ export default function TodaySchedule() {
                     : "bg-cream"
               }`}
             >
-              {isBreak ? s.mapel : `${s.mulai}–${s.selesai} · ${s.mapel}`}
+              <span>{isBreak ? s.mapel : s.mapel}</span>
+              {!isBreak && <span className="opacity-60">{s.mulai}–{s.selesai}</span>}
             </li>
           );
         })}

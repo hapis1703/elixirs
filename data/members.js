@@ -46,6 +46,7 @@ export const members = [
   { nama: "Talitha Nabilah Sakhi", lahir: "08-23" },
   { nama: "Zhafran Putra Bayanaka" },
   { nama: "Zohra Naraya Putri Bantolo" },
+  { nama: "Test User", lahir: "09-06" },
 ];
 
 export const kelas = {

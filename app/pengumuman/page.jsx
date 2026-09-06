@@ -1,7 +1,8 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SectionHeading from "@/components/SectionHeading";
-import { pengumuman } from "@/data/content";
+import { pengumuman as localPengumuman } from "@/data/content";
+import { getPengumuman } from "@/lib/sheets";
 
 const fmt = (iso) =>
   new Date(iso).toLocaleDateString("id-ID", {
@@ -11,7 +12,15 @@ const fmt = (iso) =>
     year: "numeric",
   });
 
-export default function PengumumanPage() {
+export default async function PengumumanPage() {
+  let pengumuman = localPengumuman;
+  try {
+    const p = await getPengumuman();
+    if (p.length) pengumuman = p;
+  } catch (e) {
+    console.error("Sheets fetch failed, using local fallback:", e.message);
+  }
+
   const sorted = [...pengumuman].sort((a, b) => {
     if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1;
     return b.tanggal.localeCompare(a.tanggal);
@@ -50,3 +59,5 @@ export default function PengumumanPage() {
     </>
   );
 }
+
+</parameter>
