@@ -208,5 +208,3 @@ export default async function Home() {
     </>
   );
 }
-
-</parameter>
