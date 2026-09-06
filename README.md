@@ -14,7 +14,7 @@ Satu rumah digital buat 43 siswa: jadwal pelajaran yang update sendiri sesuai ja
 
 | Route | Deskripsi |
 |---|---|
-| `/` | Homepage: hero, marquee berjalan, jadwal hari ini (otomatis), pengumuman pinned, preview galeri, quick links |
+| `/` | Homepage: hero, marquee berjalan, jadwal hari ini + besok (otomatis), ultah counter, pengumuman pinned, preview galeri, quick links |
 | `/anggota` | 43 kartu siswa + avatar inisial + badge jabatan + pencarian nama + tilt 3D saat hover |
 | `/struktur` | Organigram 4 level: wali kelas → ketua/wakil → bendahara/sekretaris → 4 seksi |
 | `/jadwal` | Jadwal Senin–Jumat per hari dalam kartu warna-warni |
@@ -25,9 +25,9 @@ Satu rumah digital buat 43 siswa: jadwal pelajaran yang update sendiri sesuai ja
 
 ### Fitur Unggulan
 
-- **Jadwal dinamis** — halaman home mendeteksi hari & jam dari browser, lalu menampilkan mapel yang sedang berlangsung dengan badge `SEDANG`. Sabtu/Minggu otomatis menampilkan layar libur.
-- **Jam live** — halaman anggota menampilkan jam real-time + mapel berjalan.
-- **Konten tanpa coding** — semua data siswa, jadwal, struktur, galeri, pengumuman, dan prestasi hidup di folder `data/`. Edit file → push → selesai.
+- **Jadwal dinamis** — halaman home mendeteksi hari & jam dari browser, menampilkan mapel sedang berlangsung + jadwal besok. Sabtu/Minggu otomatis layar libur.
+- **Ulang tahun counter** — homepage otomatis highlight anggota yang ultah hari ini (data dari `members.js`).
+- **Konten tanpa coding** — pengumuman & galeri dikelola via **Google Sheets**. Data lain (siswa, jadwal, struktur) tetap di folder `data/`.
 - **Desain neo-brutalist playful** — border hitam tebal, hard shadow, palet kuning/pink/biru/lime/ungu di atas dasar cream bermotif grid ala buku tulis.
 - **Animasi halus** — reveal on-scroll, transisi antar halaman, marquee dua arah (pause saat hover), botol potion melayang di hero — semua menghormati `prefers-reduced-motion`.
 - **Menfess ke Discord** — form pesan rahasia dengan search lagu Deezer (atau ketik manual). Kirim langsung ke channel Discord via webhook embed. Tanpa database, tanpa admin panel.
@@ -40,9 +40,22 @@ Satu rumah digital buat 43 siswa: jadwal pelajaran yang update sendiri sesuai ja
 | [Next.js 16](https://nextjs.org) (App Router) | Framework React, static prerender semua halaman |
 | [Tailwind CSS v4](https://tailwindcss.com) | Styling utility-first dengan design token `@theme` |
 | [Tabler Icons](https://tabler.io/icons) | Ikon (jika dibutuhkan) |
+| [googleapis](https://github.com/googleapis/google-api-nodejs-client) | Google Sheets API integration (opsional) |
 | Font: Bricolage Grotesque + Plus Jakarta Sans | Display & body, via `next/font` |
 
-Konten sepenuhnya file statis. Satu-satunya server-side endpoint: API route Next.js untuk proxy Deezer dan kirim menfess ke Discord webhook. Tidak ada database.
+Konten sepenuhnya file statis. Data pengumuman & galeri bisa dikelola via **Google Sheets** (opsional). API route Next.js proxy Deezer + kirim menfess ke Discord webhook. Tidak ada database.
+
+## Google Sheets Integration (Opsional)
+
+Pengumuman dan galeri bisa diedit langsung dari Google Sheets tanpa touch kode:
+
+1. Buat Google Cloud Service Account + enable Sheets API.
+2. Share spreadsheet ke email service account (Editor).
+3. Set env var `GOOGLE_SERVICE_ACCOUNT_JSON` (isi JSON key).
+4. Jalankan `node seed-sheets.mjs` untuk populate data awal.
+5. Website fetch Sheets saat build/request, fallback ke data lokal kalau gagal.
+
+Tab Sheets wajib: **Pengumuman** (id, tanggal, judul, isi, pinned) dan **Galeri** (src, judul, tanggal, w, h).
 
 ## Struktur Proyek
 
@@ -64,19 +77,25 @@ Konten sepenuhnya file statis. Satu-satunya server-side endpoint: API route Next
 │   ├── Navbar.jsx          # Nav responsif + menu mobile
 │   ├── Footer.jsx
 │   ├── TodaySchedule.jsx   # Jadwal hari ini + badge "SEDANG"
+│   ├── TomorrowSchedule.jsx # Jadwal besok
+│   ├── BirthdayCounter.jsx # Ulang tahun hari ini
 │   ├── SectionHeading.jsx  # Heading sticker playful
 │   ├── Reveal.jsx          # Animasi reveal on-scroll
 │   └── Doodles.jsx         # SVG doodle: potion, gelembung, bintang, dll
 ├── app/api/
 │   ├── shoutbox/route.js   # POST menfess → Discord webhook embed
 │   └── deezer/route.js     # Proxy Deezer search (bypass CORS)
+├── lib/
+│   ├── sheets.js           # Fetch data dari Google Sheets API
+│   └── sheets-seed.js      # Seed data awal ke Sheets
 ├── data/
 │   ├── members.js          # 43 siswa + info kelas + IG
 │   ├── schedule.js         # Jadwal pelajaran Senin–Jumat
 │   ├── struktur.js         # Organigram kelas
-│   ├── content.js          # Pengumuman & prestasi
-│   └── galeri.js           # Daftar foto galeri
-├── .env.local              # DISCORD_MENFESS_WEBHOOK URL
+│   ├── content.js          # Pengumuman & prestasi (fallback lokal)
+│   └── galeri.js           # Daftar foto galeri (fallback lokal)
+├── .env.local              # GOOGLE_SERVICE_ACCOUNT_JSON
+├── seed-sheets.mjs         # Script populate data awal ke Sheets
 └── public/gallery/         # File foto momen kelas
 ```
 
@@ -98,9 +117,15 @@ Buka [http://localhost:3000](http://localhost:3000).
 
 ## Cara Update Konten
 
-Semua tanpa menyentuh kode:
+### Via Google Sheets (Pengumuman & Galeri)
 
-**Tambah pengumuman** — edit `data/content.js`:
+Edit langsung di spreadsheet. Website auto-fetch saat request. Fallback ke data lokal jika Sheets error.
+
+### Via File (Anggota, Jadwal, Struktur, Prestasi)
+
+Edit file di folder `data/`:
+
+**Tambah pengumuman (fallback)** — edit `data/content.js`:
 
 ```js
 export const pengumuman = [
@@ -114,7 +139,7 @@ export const pengumuman = [
 ];
 ```
 
-**Tambah foto galeri** — taruh file di `public/gallery/`, lalu daftarkan di `data/galeri.js`:
+**Tambah foto galeri (fallback)** — taruh file di `public/gallery/`, lalu daftarkan di `data/galeri.js`:
 
 ```js
 {
@@ -143,7 +168,8 @@ Situs ini full static sehingga mudah dideploy:
 
 1. Push repo ini ke GitHub.
 2. Impor project di [vercel.com/new](https://vercel.com/new).
-3. Selesai — setiap push akan redeploy otomatis.
+3. Set environment variable `GOOGLE_SERVICE_ACCOUNT_JSON` di Settings → Environment Variables.
+4. Selesai — setiap push akan redeploy otomatis.
 
 Opsional: set `metadataBase` di `app/layout.jsx` ke domain final agar OG image memakai URL absolut.
 
