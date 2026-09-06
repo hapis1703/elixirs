@@ -10,6 +10,8 @@ import { getGaleri } from "@/lib/sheets";
 const fmt = (iso) =>
   new Date(iso).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
 
+export const revalidate = 60;
+
 export default async function GaleriPage() {
   let galeri = localGaleri;
   try {

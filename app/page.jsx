@@ -41,6 +41,8 @@ function Marquee({ reverse = false }) {
   );
 }
 
+export const revalidate = 60;
+
 export default async function Home() {
   let pengumuman = localPengumuman;
   let galeri = localGaleri;

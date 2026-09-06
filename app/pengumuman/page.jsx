@@ -12,6 +12,8 @@ const fmt = (iso) =>
     year: "numeric",
   });
 
+export const revalidate = 60;
+
 export default async function PengumumanPage() {
   let pengumuman = localPengumuman;
   try {
