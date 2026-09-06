@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { members } from "@/data/members";
 import { slotNow, today } from "@/data/schedule";
 
 const palette = ["bg-yellow", "bg-blue", "bg-lime", "bg-pink text-white", "bg-purple text-white"];
@@ -55,12 +54,27 @@ export default function AnggotaPage() {
   const [jab, setJab] = useState("Semua");
   // Jam live — hydration-safe: render kosong dulu di server.
   const [clock, setClock] = useState(null);
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const tick = () => setClock(new Date());
     tick();
     const t = setInterval(tick, 1000);
     return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/members")
+      .then((res) => res.json())
+      .then((data) => {
+        setMembers(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to load members:", err);
+        setLoading(false);
+      });
   }, []);
 
   // Kelompok jabatan untuk filter (gabung Bendahara I/II dst jadi satu).
@@ -76,6 +90,18 @@ export default function AnggotaPage() {
       m.nama.toLowerCase().includes(q.trim().toLowerCase()) &&
       (jab === "Semua" || (m.jabatan && m.jabatan.replace(/ (I|II)$/, "") === jab))
   );
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <main className="mx-auto max-w-5xl px-4 py-10">
+          <p>Loading...</p>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>

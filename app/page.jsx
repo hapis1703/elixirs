@@ -10,7 +10,8 @@ import Reveal from "@/components/Reveal";
 import { Star, ScribbleArrow, Bubbles } from "@/components/Doodles";
 import MagicPotion from "@/components/MagicPotion";
 import StickerDivider from "@/components/StickerDivider";
-import { kelas, members } from "@/data/members";
+import { kelas } from "@/data/members";
+import { getMembers } from "@/lib/sheets";
 import { pengumuman as localPengumuman } from "@/data/content";
 import { galeri as localGaleri } from "@/data/galeri";
 import { getPengumuman, getGaleri } from "@/lib/sheets";
@@ -44,6 +45,14 @@ function Marquee({ reverse = false }) {
 export const revalidate = 60;
 
 export default async function Home() {
+  let members = [];
+  try {
+    const m = await getMembers();
+    if (m.length) members = m;
+  } catch (e) {
+    console.error("Sheets members fetch failed:", e.message);
+  }
+
   let pengumuman = localPengumuman;
   let galeri = localGaleri;
   try {
@@ -102,7 +111,7 @@ export default async function Home() {
 
         {/* BIRTHDAY COUNTER */}
         <section className="mx-auto max-w-5xl px-4 py-6">
-          <BirthdayCounter />
+          <BirthdayCounter members={members} />
         </section>
 
         {/* JADWAL HARI INI + BESOK + PENGUMUMAN */}

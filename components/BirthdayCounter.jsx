@@ -1,9 +1,9 @@
 "use client";
 
-import { members } from "@/data/members";
+import { members as localMembers } from "@/data/members";
 
 // Filter anggota yang ulang tahun bulan ini atau hari ini.
-export default function BirthdayCounter() {
+export default function BirthdayCounter({ members = localMembers }) {
   const now = new Date();
   const currentMonth = now.getMonth() + 1; // 1-12
   const currentDay = now.getDate();
