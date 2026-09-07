@@ -1,7 +1,9 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SectionHeading from "@/components/SectionHeading";
-import { schedule } from "@/data/schedule";
+import { getSchedule } from "@/lib/sheets";
+
+export const revalidate = 60;
 
 const dayColors = ["bg-yellow", "bg-pink text-white", "bg-blue", "bg-lime", "bg-purple text-white"];
 
@@ -11,7 +13,14 @@ function slotClass(s) {
   return "bg-cream";
 }
 
-export default function JadwalPage() {
+export default async function JadwalPage() {
+  let schedule = [];
+  try {
+    schedule = await getSchedule();
+  } catch (e) {
+    console.error("Failed to fetch schedule:", e.message);
+  }
+
   return (
     <>
       <Navbar />
