@@ -1,23 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { slotNow, today } from "@/data/schedule";
 
-// Jadwal hari ini + badge mapel berjalan. Client component karena bergantung jam browser.
+// Helper: parse time string "HH.MM" to minutes since midnight
+const toMin = (t) => {
+  const [h, m] = t.split(".").map(Number);
+  return h * 60 + m;
+};
+
 export default function TodaySchedule() {
+  const [schedule, setSchedule] = useState(null);
   const [now, setNow] = useState(null);
 
   useEffect(() => {
+    fetch("/api/schedule")
+      .then((res) => res.json())
+      .then((data) => setSchedule(data))
+      .catch(console.error);
+    
     setNow(new Date());
     const t = setInterval(() => setNow(new Date()), 30000);
     return () => clearInterval(t);
   }, []);
 
-  if (!now) return <p className="text-sm opacity-60">Memuat jadwal…</p>;
+  if (!schedule || !now) return <p className="text-sm opacity-60">Memuat jadwal…</p>;
 
-  const d = today(now);
-  const current = slotNow(now);
-
+  const dayIndex = now.getDay(); // 0=Minggu ... 5=Jumat
+  const d = schedule.find((s) => s.index === dayIndex);
+  
   if (!d) {
     return (
       <div className="bcard bg-lime p-5">
@@ -28,6 +38,9 @@ export default function TodaySchedule() {
       </div>
     );
   }
+
+  const mins = now.getHours() * 60 + now.getMinutes();
+  const current = d.slots.find((s) => mins >= toMin(s.mulai) && mins < toMin(s.selesai));
 
   return (
     <div className="bcard bg-white p-5">

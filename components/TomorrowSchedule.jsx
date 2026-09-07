@@ -1,10 +1,21 @@
 "use client";
 
-import { tomorrow } from "@/data/schedule";
+import { useEffect, useState } from "react";
 
-// Jadwal besok (static, no timer needed).
 export default function TomorrowSchedule() {
-  const d = tomorrow();
+  const [schedule, setSchedule] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/schedule")
+      .then((res) => res.json())
+      .then((data) => setSchedule(data))
+      .catch(console.error);
+  }, []);
+
+  if (!schedule) return <p className="text-sm opacity-60">Memuat jadwal…</p>;
+
+  const nextDay = (new Date().getDay() + 1) % 7;
+  const d = schedule.find((s) => s.index === nextDay);
 
   if (!d) {
     return (
