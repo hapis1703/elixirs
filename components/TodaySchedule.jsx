@@ -13,11 +13,11 @@ export default function TodaySchedule() {
   const [now, setNow] = useState(null);
 
   useEffect(() => {
-    fetch("/api/schedule")
+    fetch("/api/schedule", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => setSchedule(data))
       .catch(console.error);
-    
+
     setNow(new Date());
     const t = setInterval(() => setNow(new Date()), 30000);
     return () => clearInterval(t);

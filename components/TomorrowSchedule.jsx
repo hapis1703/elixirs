@@ -6,7 +6,7 @@ export default function TomorrowSchedule() {
   const [schedule, setSchedule] = useState(null);
 
   useEffect(() => {
-    fetch("/api/schedule")
+    fetch("/api/schedule", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => setSchedule(data))
       .catch(console.error);
